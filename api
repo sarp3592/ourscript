@@ -1,0 +1,41 @@
+while true do 
+local victim = game.Players:FindFirstChild("ezkidgetgood_ratio11")
+
+
+
+
+local PathfindingService = game:GetService("PathfindingService")
+local function pathto(part)
+    settings = {
+        AgentRadius = 4;
+        AgentHeight = 5;
+        AgentCanJump = true; --Doesn't jump for some reason no matter what dont ask me.
+    }
+    local path = PathfindingService:CreatePath(settings)
+    path:ComputeAsync(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, part)
+    local waypoints = path:GetWaypoints()
+    for _, waypoint in pairs(waypoints) do
+        local part = Instance.new("Part")
+        part.Shape = "Ball"
+        part.Material = "Neon"
+        part.Size = Vector3.new(0.6, 0.6, 0.6)
+        part.Position = waypoint.Position
+        part.Anchored = true
+        part.CanCollide = false
+        part.Parent = game.Workspace
+        game.Players.LocalPlayer.Character.Humanoid:MoveTo(waypoint.Position)
+        if waypoint.Action == Enum.PathWaypointAction.Jump then
+        game.Players.LocalPlayer.Character.Humanoid.Jump = true
+        end
+        game.Debris:AddItem(part,1)
+        game.Players.LocalPlayer.Character.Humanoid.MoveToFinished:Wait()
+    end
+end
+
+while wait() do
+pcall(function()
+pathto(victim.Character.HumanoidRootPart.Position)
+end)
+end
+wait(2)
+end
